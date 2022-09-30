@@ -3,7 +3,7 @@
   border-radius: 2px;
   border: 0;
   color: #fff;
-  background-color: #212d75;
+  background-color: #5b67a8;
   box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14),
     0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 
@@ -13,7 +13,7 @@
 .buttonLoadMore:active,
 .buttonLoadMore:focus,
 .buttonLoadMore:hover {
-  background-color: #2a3c9d;
+  background-color: #5062c4;
   box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14),
     0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 }

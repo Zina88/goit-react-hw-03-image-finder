@@ -89,7 +89,7 @@ export default class App extends Component {
 
         {isImage && <ImageGallery images={images} toggleModal={this.toggleModal} />}
 
-        {totalHits >= 12 && <Button onClick={this.onLoadMore} />}
+        {totalHits >= 12 * this.state.page && <Button onClick={this.onLoadMore} />}
       </div>
     );
   }

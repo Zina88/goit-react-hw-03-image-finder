@@ -3,6 +3,9 @@ import fetchGallery from '../services/api';
 import ImageGallery from './ImageGallery';
 import Searchbar from './Searchbar';
 import Button from './Button';
+import Loader from './Loader';
+import Modal from './Modal';
+import { Report } from 'notiflix/build/notiflix-report-aio';
 import css from './App.module.css';
 
 export default class App extends Component {
@@ -12,6 +15,8 @@ export default class App extends Component {
     images: [],
     isLoading: false,
     error: false,
+    showModal: false,
+    bigImage: '',
   };
 
   async componentDidUpdate(_, prevState) {
@@ -34,7 +39,7 @@ export default class App extends Component {
 
   async fetchImages(searchQuery, page) {
     try {
-      await fetchGallery(searchQuery, page).then(data => {
+      fetchGallery(searchQuery, page).then(data => {
         this.setState(prevState => {
           return {
             prevState,
@@ -44,6 +49,10 @@ export default class App extends Component {
             totalHits: data.totalHits,
           };
         });
+
+        if (data.totalHits === 0) {
+          return Report.warning('Not found!', 'Sorry, Nothing found', 'Close');
+        }
       });
     } catch (error) {
       this.setState({ error: true, isLoading: false });
@@ -61,15 +70,26 @@ export default class App extends Component {
     }));
   };
 
+  toggleModal = largeImageURL => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+      bigImage: largeImageURL,
+    }));
+  };
+
   render() {
-    const { images, isLoading, totalHits } = this.state;
-    console.log(totalHits);
+    const { images, isLoading, totalHits, showModal, bigImage } = this.state;
+    const isImage = Boolean(totalHits);
 
     return (
       <div className={css.container}>
         <Searchbar onSubmit={this.handleFormSubmit} />
-        {isLoading ? 'Loading...' : <ImageGallery images={images} />}
-        {images.length !== 0 && <Button onClick={this.onLoadMore} />}
+        {isLoading && <Loader />}
+        {showModal && <Modal image={bigImage} onClickModal={this.toggleModal} />}
+
+        {isImage && <ImageGallery images={images} toggleModal={this.toggleModal} />}
+
+        {totalHits >= 12 && <Button onClick={this.onLoadMore} />}
       </div>
     );
   }

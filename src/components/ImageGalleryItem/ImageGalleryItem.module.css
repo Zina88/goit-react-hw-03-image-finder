@@ -1,3 +1,11 @@
-.galleryItem {
-  margin-bottom: 3px;
+.imgItem {
+  box-shadow: 0.5px 0.5px 3px #212d75, -0.5px -0.5px 3px #212d75;
+  transition: scale 250ms linear, box-shadow 250ms linear;
+  border-radius: 3px;
+}
+
+.imgItem:hover,
+.imgItem:focus {
+  scale: 1.02;
+  box-shadow: 1px 1px 3px #203bd0, -1px -1px 3px #203bd0;
 }

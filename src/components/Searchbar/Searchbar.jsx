@@ -13,12 +13,6 @@ class Searchbar extends Component {
     this.setState({ searchQuery: e.currentTarget.value.toLowerCase() });
   };
 
-  resetForm = () => {
-    this.setState({
-      searchQuery: '',
-    });
-  };
-
   handleSubmit = e => {
     e.preventDefault();
 
@@ -29,10 +23,11 @@ class Searchbar extends Component {
       return Report.warning('Error!', 'Please enter a request', 'Close');
     }
     onSubmit(searchQuery);
-    this.resetForm();
   };
 
   render() {
+    const { searchQuery } = this.state;
+
     return (
       <header className={css.searchbar}>
         <form className={css.form} onSubmit={this.handleSubmit}>
@@ -49,7 +44,7 @@ class Searchbar extends Component {
             autoFocus
             placeholder="Search images and photos"
             onChange={this.handleQueryChange}
-            value={this.searchQuery}
+            value={searchQuery}
           />
         </form>
       </header>

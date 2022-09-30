@@ -12,21 +12,42 @@ export default class App extends Component {
     images: [],
     isLoading: false,
     error: false,
-    status: 'idle',
   };
 
-  async componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(_, prevState) {
     const { searchQuery, page } = this.state;
-
-    if (prevState.searchQuery !== searchQuery) {
-      try {
+    try {
+      if (prevState.searchQuery !== searchQuery) {
         this.setState({ isLoading: true, page: 1, images: [] });
-        const images = await fetchGallery(searchQuery, page);
-        console.log(images);
-        this.setState({ images, isLoading: false, page: 1 });
-      } catch (error) {
-        console.log(error);
+
+        this.fetchImages(searchQuery, page);
       }
+
+      if (prevState.page !== page && page !== 1) {
+        this.fetchImages(searchQuery, page);
+      }
+    } catch (error) {
+      this.setState({ error: true, isLoading: false });
+      console.log(error);
+    }
+  }
+
+  async fetchImages(searchQuery, page) {
+    try {
+      await fetchGallery(searchQuery, page).then(data => {
+        this.setState(prevState => {
+          return {
+            prevState,
+            isLoading: false,
+            images: [...prevState.images, ...data.hits],
+            searchQuery: searchQuery,
+            totalHits: data.totalHits,
+          };
+        });
+      });
+    } catch (error) {
+      this.setState({ error: true, isLoading: false });
+      console.log(error);
     }
   }
 
@@ -42,36 +63,14 @@ export default class App extends Component {
 
   render() {
     const { images, isLoading, totalHits } = this.state;
+    console.log(totalHits);
 
     return (
       <div className={css.container}>
         <Searchbar onSubmit={this.handleFormSubmit} />
         {isLoading ? 'Loading...' : <ImageGallery images={images} />}
-        {images.length !== totalHits && <Button onClick={this.onLoadMore} />}
+        {images.length !== 0 && <Button onClick={this.onLoadMore} />}
       </div>
     );
   }
-  //   const { images, error, status } = this.state;
-
-  //   if (status === 'idle') {
-  //     return (
-  //       <div>
-  //       <p>Введите ключевое слово! </p>
-  //       <Searchbar />
-  //     </div>
-  //     )
-  //   }
-
-  //   if (status === 'pending') {
-  //     return;
-  //   }
-
-  //   if (status === 'rejected') {
-  //     return;
-  //   }
-
-  //   if (status === 'resolved') {
-  //     return;
-  //   }
-  // }
 }

@@ -13,6 +13,12 @@ class Searchbar extends Component {
     this.setState({ searchQuery: e.currentTarget.value.toLowerCase() });
   };
 
+  resetForm = () => {
+    this.setState({
+      searchQuery: '',
+    });
+  };
+
   handleSubmit = e => {
     e.preventDefault();
 
@@ -23,7 +29,7 @@ class Searchbar extends Component {
       return Report.warning('Error!', 'Please enter a request', 'Close');
     }
     onSubmit(searchQuery);
-    this.setState({ searchQuery: '' });
+    this.resetForm();
   };
 
   render() {
@@ -31,8 +37,8 @@ class Searchbar extends Component {
       <header className={css.searchbar}>
         <form className={css.form} onSubmit={this.handleSubmit}>
           <button type="submit" className={css.button}>
-            <span >
-              <ImSearch  className={css.buttonLabel}/>
+            <span>
+              <ImSearch className={css.buttonLabel} />
             </span>
           </button>
 
@@ -53,6 +59,6 @@ class Searchbar extends Component {
 
 export default Searchbar;
 
-// Searchbar.propTypes = {
-//   onSubmit: PropTypes.func.isRequired,
-// };
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

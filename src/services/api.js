@@ -7,7 +7,7 @@ const fetchGallery = async (searchQuery, page) => {
   const response = await axios.get(
     `?key=${API_KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=12`,
   );
-  return response.data.hits;
+  return response.data;
 };
 
 export default fetchGallery;

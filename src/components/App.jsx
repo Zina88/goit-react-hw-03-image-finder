@@ -37,27 +37,22 @@ export default class App extends Component {
     }
   }
 
-  async fetchImages(searchQuery, page) {
-    try {
-      fetchGallery(searchQuery, page).then(data => {
-        this.setState(prevState => {
-          return {
-            prevState,
-            isLoading: false,
-            images: [...prevState.images, ...data.hits],
-            searchQuery: searchQuery,
-            totalHits: data.totalHits,
-          };
-        });
-
-        if (data.totalHits === 0) {
-          return Report.warning('Not found!', 'Sorry, Nothing found', 'Close');
-        }
+  fetchImages(searchQuery, page) {
+    fetchGallery(searchQuery, page).then(data => {
+      this.setState(prevState => {
+        return {
+          prevState,
+          isLoading: false,
+          images: [...prevState.images, ...data.hits],
+          searchQuery: searchQuery,
+          totalHits: data.totalHits,
+        };
       });
-    } catch (error) {
-      this.setState({ error: true, isLoading: false });
-      console.log(error);
-    }
+
+      if (data.totalHits === 0) {
+        return Report.warning('Not found!', 'Sorry, Nothing found', 'Close');
+      }
+    });
   }
 
   handleFormSubmit = searchQuery => {
